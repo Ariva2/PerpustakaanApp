@@ -2,7 +2,10 @@ package frame;
 
 import db.Koneksi;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,6 +13,8 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -57,7 +62,8 @@ public class PenerbitTampilFrame extends JFrame{
     bBatal.setBounds(245,220,70,25);
     jScrollPane.setBounds(10,45,460,160);
     
-    resetTable("");    
+    resetTable("");
+    setListener();
     setVisible(true);
     }
     
@@ -112,6 +118,60 @@ public class PenerbitTampilFrame extends JFrame{
         DefaultTableModel model = (DefaultTableModel)tPenerbit.getModel();
         model.setRowCount(0);
         selectPenerbit(keyword);
+    }
+    
+    public void setListener() {
+        bTutup.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        
+        bCari.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetTable(" WHERE Penerbit like '%"+eCari.getText()+"%'");
+            }
+        });
+        
+        bBatal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetTable("");
+            }
+        });
+        
+        bHapus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int i = tPenerbit.getSelectedRow();
+                int pilihan = JOptionPane.showCCountfirmDialog(
+                                null,
+                                "Yakin mau hapus ?",
+                                "Konfirmasi hapus",
+                                JOptionPane.YES_NO_OPTION);
+                if(pilihan==0) {
+                    if(i>=0) {
+                    try {
+                        TableModel mode = tPenerbit.getModel();
+                        Koneksi koneksi = new Koneksi();
+                        Connection con = koneksi.getConnection();
+                        String executeQuery = "delete from penerbit where id =?";
+                        PreparedStatement ps = con.prepareStatement (executeQuery);
+                        ps.setString(1, model.getValueAt(i,0).toString());
+                        ps.executeUpdate();
+                        
+                    } catch (SQLException ex) {
+                        System.out.println(ex);
+                    }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Pilih data yang ingin dihapus");
+                    }
+                }
+                resetTable("");
+            }
+        });
     }
 }
 
