@@ -196,10 +196,11 @@ public class PenerbitTampilFrame extends JFrame{
             }
         });
         
-        
-        
-        
-        
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActived(java.awt.event.WindowEvent evt) {
+                resetTable("");
+            }
+        });
     }
 }
 

@@ -1,5 +1,11 @@
 package frame;
 
+import db.Koneksi;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,6 +48,7 @@ public class PenerbitTambahFrame extends JFrame{
         eId.setEditable(false);
         setVisible(true);
         ePenerbit.requestFocus();
+        setListener();
     }
     
     public PenerbitTambahFrame() {
@@ -60,4 +67,40 @@ public class PenerbitTambahFrame extends JFrame{
         ePenerbit.setText(penerbit.getPenerbit());
         setKomponen();
     }
+    
+    public void setListener() {
+        bBatal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });   
+        
+        bSimpan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Koneksi koneksi = new Koneksi();
+                    Connection con = koneksi.getConnection();
+                    PreparedStatement ps = null;
+                    if(status==SEDANG_TAMBAH) {
+                        String executeQuery = "insert into penerbit (penerbit) values (?)";
+                        ps = con.prepareStatement(executeQuery);
+                        ps.setString(1, ePenerbit.getText());
+                    }else{
+                        String execueQuery = "update penerbit set penerbit=? where id=?";
+                        ps.setString(1, ePenerbit.getText());
+                        ps.setString(2, eId.getText());
+                    }
+                    ps.executeUpdate();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+                dispose();
+            }
+        });
+        
+    }
+    
+    
 }
