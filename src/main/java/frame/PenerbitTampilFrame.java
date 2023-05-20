@@ -146,7 +146,7 @@ public class PenerbitTampilFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int i = tPenerbit.getSelectedRow();
-                int pilihan = JOptionPane.showCCountfirmDialog(
+                int pilihan = JOptionPane.showConfirmDialog(
                                 null,
                                 "Yakin mau hapus ?",
                                 "Konfirmasi hapus",
@@ -159,7 +159,7 @@ public class PenerbitTampilFrame extends JFrame{
                         Connection con = koneksi.getConnection();
                         String executeQuery = "delete from penerbit where id =?";
                         PreparedStatement ps = con.prepareStatement (executeQuery);
-                        ps.setString(1, model.getValueAt(i,0).toString());
+                        ps.setString(1, model.getValueAt(i, 0).toString());
                         ps.executeUpdate();
                         
                     } catch (SQLException ex) {
@@ -172,6 +172,34 @@ public class PenerbitTampilFrame extends JFrame{
                 resetTable("");
             }
         });
+        
+        bUbah.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            int i = tPenerbit.getSelectedRow();
+            if(i>=0) {
+            TableModel model = tPenerbit.getModel();
+            penerbit = new Penerbit();
+            penerbit.setId(Integer.parseInt(model.getValueAt(i,0).toString()));
+            penerbit.setPenerbit(model.getValueAt(i, 1).toString());
+            PenerbitTambahFrame penerbitTambahFrame = new PenerbitTambahFrame(penerbit);
+            }else{
+            JOptionPane.showMessageDialog(null, "Pilih data yang ingin diubah");
+                }   
+            }
+        });
+        
+        bTambah.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PenerbitTambahFrame penerbitTambahFrame = new PenerbitTambahFrame();
+            }
+        });
+        
+        
+        
+        
+        
     }
 }
 
