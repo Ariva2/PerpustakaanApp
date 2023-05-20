@@ -1,6 +1,12 @@
 package frame;
 
+import db.Koneksi;
 import java.awt.Component;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -51,6 +57,7 @@ public class PenerbitTampilFrame extends JFrame{
     bBatal.setBounds(245,220,70,25);
     jScrollPane.setBounds(10,45,460,160);
     
+    resetTable("");    
     setVisible(true);
     }
     
@@ -63,6 +70,48 @@ public class PenerbitTampilFrame extends JFrame{
     
     public static void main(String[] args) {
         PenerbitTampilFrame penerbitTampilFrame = new PenerbitTampilFrame();
+    }
+    
+    public ArrayList<Penerbit> getPenerbitList(String keyword) {
+        ArrayList<Penerbit> penerbitList = new ArrayList<Penerbit>();
+        Koneksi koneksi = new Koneksi();
+        Connection connection = koneksi.getConnection();
+        
+        String query = "SELECT * FROM penerbit "+keyword;
+        Statement statement;
+        ResultSet resultSet;
+        
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            while(resultSet.next()) {
+                penerbit = new Penerbit(resultSet.getInt("id"),
+                        resultSet.getString("penerbit"));
+                penerbitList.add(penerbit);
+            }
+        } catch (SQLException | NullPointerException ex) {
+            System.err.println("Koneksi Null Gagal");
+        }
+        return penerbitList;
+    }
+    
+    public final void selectPenerbit(String keyword) {
+        ArrayList<Penerbit> list = getPenerbitList(keyword);
+        DefaultTableModel model = (DefaultTableModel)tPenerbit.getModel();
+        Object[] row = new Object[2];
+        
+        for (int i = 0; i < list.size(); i++) {
+            row[0] = list.get(i).getId();
+            row[1] = list.get(i).getPenerbit();
+            
+            model.addRow(row);
+        }
+    }
+    
+    public final void resetTable(String keyword) {
+        DefaultTableModel model = (DefaultTableModel)tPenerbit.getModel();
+        model.setRowCount(0);
+        selectPenerbit(keyword);
     }
 }
 
