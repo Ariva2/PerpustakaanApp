@@ -53,6 +53,7 @@ public class PenerbitTambahFrame extends JFrame{
     
     public PenerbitTambahFrame() {
         status = SEDANG_TAMBAH;
+        setSize(429,180);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setKomponen();
