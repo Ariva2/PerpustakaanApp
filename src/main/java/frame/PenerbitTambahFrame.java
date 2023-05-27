@@ -90,6 +90,8 @@ public class PenerbitTambahFrame extends JFrame{
                         ps.setString(1, ePenerbit.getText());
                     }else{
                         String execueQuery = "update penerbit set penerbit=? where id=?";
+                        ps = con.prepareStatement(execueQuery);
+
                         ps.setString(1, ePenerbit.getText());
                         ps.setString(2, eId.getText());
                     }
