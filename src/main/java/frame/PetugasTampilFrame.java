@@ -7,11 +7,14 @@ package frame;
 import com.mysql.cj.xdevapi.Result;
 import db.Koneksi;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import model.Petugas;
 
 /**
@@ -117,10 +120,25 @@ public class PetugasTampilFrame extends javax.swing.JFrame {
         bUbah.setText("Ubah");
 
         bHapus.setText("Hapus");
+        bHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bHapusActionPerformed(evt);
+            }
+        });
 
         bBatal.setText("Batal");
+        bBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBatalActionPerformed(evt);
+            }
+        });
 
         bTutup.setText("Tutup");
+        bTutup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTutupActionPerformed(evt);
+            }
+        });
 
         tPetugas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -190,7 +208,46 @@ public class PetugasTampilFrame extends javax.swing.JFrame {
 
     private void bCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCariActionPerformed
         // TODO add your handling code here:
+        resetTable(" WHERE name_petugas like '%"+eCari.getText()+"%' Or"
+                            + " username like '%"+eCari.getText()+"%'");
     }//GEN-LAST:event_bCariActionPerformed
+
+    private void bTutupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTutupActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_bTutupActionPerformed
+
+    private void bBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBatalActionPerformed
+        // TODO add your handling code here:
+        resetTable("");
+    }//GEN-LAST:event_bBatalActionPerformed
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        // TODO add your handling code here:
+        int i = tPetugas.getSelectedRow();
+                int pilihan = JOptionPane.showConfirmDialog(
+                                null,
+                                "Yakin mau hapus ?",
+                                "Konfirmasi hapus",
+                                JOptionPane.YES_NO_OPTION);
+                if(pilihan==0) {
+                    if(i>=0) {
+                        try {
+                            TableModel model = tPetugas.getModel();
+                            Koneksi koneksi = new Koneksi();
+                            Connection con = koneksi.getConnection();
+                            String executeQuery = "delete from petugas where id =?";
+                            PreparedStatement ps = con.prepareStatement (executeQuery);
+                            ps.setString(1, model.getValueAt(i,0).toString());
+                            ps.executeUpdate();
+                        } catch (SQLException ex) {
+                            System.err.println(ex);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Pilih data yang ingin dihapus");
+                    }
+                }resetTable("");
+    }//GEN-LAST:event_bHapusActionPerformed
 
     /**
      * @param args the command line arguments
