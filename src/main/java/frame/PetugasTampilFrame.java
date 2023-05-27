@@ -99,6 +99,11 @@ public class PetugasTampilFrame extends javax.swing.JFrame {
         tPetugas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setText("Cari Petugas");
 
@@ -116,8 +121,18 @@ public class PetugasTampilFrame extends javax.swing.JFrame {
         });
 
         bTambah.setText("Tambah");
+        bTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTambahActionPerformed(evt);
+            }
+        });
 
         bUbah.setText("Ubah");
+        bUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUbahActionPerformed(evt);
+            }
+        });
 
         bHapus.setText("Hapus");
         bHapus.addActionListener(new java.awt.event.ActionListener() {
@@ -248,6 +263,34 @@ public class PetugasTampilFrame extends javax.swing.JFrame {
                     }
                 }resetTable("");
     }//GEN-LAST:event_bHapusActionPerformed
+
+    private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
+        // TODO add your handling code here:
+        PetugasTambahFrame petugasTambahFrame = new PetugasTambahFrame();
+        petugasTambahFrame.setVisible(true);
+    }//GEN-LAST:event_bTambahActionPerformed
+
+    private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
+        // TODO add your handling code here:
+        int i = tPetugas.getSelectedRow();
+        if(i>=0) {
+            TableModel model = tPetugas.getModel();
+            petugas = new Petugas();
+            petugas.setId(Integer.parseInt(model.getValueAt(i,0).toString()));
+            petugas.setNamaPetugas(model.getValueAt(i,1).toString());
+            petugas.setUsername(model.getValueAt(i,2).toString());
+            petugas.setPassword(model.getValueAt(i,3).toString());
+            PetugasTambahFrame petugasTambahFrame = new PetugasTambahFrame(petugas);
+            petugasTambahFrame.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "Pilih data yang ingin diubah");
+        }
+    }//GEN-LAST:event_bUbahActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        resetTable("");
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
