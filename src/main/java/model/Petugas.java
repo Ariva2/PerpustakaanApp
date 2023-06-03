@@ -51,4 +51,6 @@ public class Petugas {
         this.id = id;
         this.namaPetugas = namaPetugas;
     }
+    
+    
 }

@@ -5,6 +5,7 @@
 package frame;
 
 import db.Koneksi;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import model.Anggota;
+import model.Petugas;
 
 /**
  *
@@ -117,6 +119,11 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
         tAnggota = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setText("Cari Petugas");
 
@@ -264,6 +271,26 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
 
     private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
         // TODO add your handling code here:
+        int i  = tAnggota.getSelectedRow();
+        if(i>=0) {
+            TableModel model  = tAnggota.getModel();
+            anggota = new Anggota();
+            anggota.setId(model.getValueAt(i, 0).toString());
+            anggota.setNamaAnggota(model.getValueAt(i, 1).toString());
+            anggota.setJenisKelamin(model.getValueAt(i, 2).toString());
+            anggota.setTanggalLahir(model.getValueAt(i, 3).toString());
+            anggota.setAgama(model.getValueAt(i, 4).toString());
+            anggota.setPetugas(new Petugas
+                    (Integer.parseInt(model.getValueAt(i, 5).toString()),
+                    model.getValueAt(i,6).toString()));
+            Blob blob = (Blob) model.getValueAt(i, 7);
+            anggota.setFotoAnggota(blob);
+            
+            AnggotaTambahFrame anggotaTambahFrame = new AnggotaTambahFrame(anggota);
+            anggotaTambahFrame.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "Pilih data yang ingin diubah");
+        }
     }//GEN-LAST:event_bUbahActionPerformed
 
     private void bTutupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTutupActionPerformed
@@ -273,7 +300,14 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         // TODO add your handling code here:
+        AnggotaTambahFrame anggotaTambahFrame = new AnggotaTambahFrame();
+        anggotaTambahFrame.setVisible(true);
     }//GEN-LAST:event_bTambahActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        resetTable("");
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
