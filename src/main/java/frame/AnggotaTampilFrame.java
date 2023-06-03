@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import model.Anggota;
 
 /**
@@ -49,7 +51,7 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
                         rs.getString("jenis_kelamin"),
                         rs.getString("tanggal_lahir"),
                         rs.getString("agama"),
-                        rs.getString("id_petugas"),
+                        rs.getInt("id_petugas"),
                         rs.getString("petugas.nama_petugas"),
                         rs.getString("foto_anggota"));
                 anggotaList.add(anggota);
@@ -86,6 +88,8 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
         selectAnggota(keyword);
     }
     
+    
+    
     public AnggotaTampilFrame() {
         initComponents();
         setLocationRelativeTo(null);
@@ -116,22 +120,47 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
 
         jLabel1.setText("Cari Petugas");
 
-        bCari.setText("Tambah");
+        bCari.setText("Cari");
         bCari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bCariActionPerformed(evt);
             }
         });
 
-        bTambah.setText("Ubah");
+        bTambah.setText("Tambah");
+        bTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTambahActionPerformed(evt);
+            }
+        });
 
-        bUbah.setText("Hapus");
+        bUbah.setText("Ubah");
+        bUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUbahActionPerformed(evt);
+            }
+        });
 
-        bHapus.setText("Batal");
+        bHapus.setText("Hapus");
+        bHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bHapusActionPerformed(evt);
+            }
+        });
 
-        bBatal.setText("Tutup");
+        bBatal.setText("Batal");
+        bBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBatalActionPerformed(evt);
+            }
+        });
 
-        bTutup.setText("Cari");
+        bTutup.setText("Tutup");
+        bTutup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTutupActionPerformed(evt);
+            }
+        });
 
         tAnggota.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -155,21 +184,21 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(bCari)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bTambah)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bUbah)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bHapus)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bBatal)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bBatal))
+                        .addComponent(bTutup))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(eCari)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bTutup)))
+                        .addComponent(bCari)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -179,16 +208,16 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(eCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bTutup))
+                    .addComponent(bCari))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bCari)
                     .addComponent(bTambah)
                     .addComponent(bUbah)
                     .addComponent(bHapus)
-                    .addComponent(bBatal))
+                    .addComponent(bBatal)
+                    .addComponent(bTutup))
                 .addContainerGap())
         );
 
@@ -197,7 +226,54 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
 
     private void bCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCariActionPerformed
         // TODO add your handling code here:
+        resetTable(eCari.getText());
     }//GEN-LAST:event_bCariActionPerformed
+
+    private void bBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBatalActionPerformed
+        // TODO add your handling code here:
+        resetTable("");
+    }//GEN-LAST:event_bBatalActionPerformed
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        // TODO add your handling code here:
+        int i = tAnggota.getSelectedRow();
+        int pilihan = JOptionPane.showConfirmDialog(
+            null,
+            "Yakin mau hapus ?",
+            "Konfirmmasi hapus",
+            JOptionPane.YES_NO_OPTION);
+        if(pilihan==0) {
+            if(i>=0) {
+                try {
+                    TableModel model = tAnggota.getModel();
+                    Koneksi koneksi = new Koneksi();
+                    Connection con = koneksi.getConnection();
+                    String executeQuery = "delete from anggota where id =?";
+                    PreparedStatement ps = con.prepareStatement(executeQuery);
+                    ps.setString(1, model.getValueAt(i,0).toString());
+                    ps.executeUpdate();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Pilih data yang ingin dihapus");
+            }
+        }
+        resetTable("");
+    }//GEN-LAST:event_bHapusActionPerformed
+
+    private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bUbahActionPerformed
+
+    private void bTutupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTutupActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_bTutupActionPerformed
+
+    private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bTambahActionPerformed
 
     /**
      * @param args the command line arguments
