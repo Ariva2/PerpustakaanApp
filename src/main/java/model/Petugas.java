@@ -46,4 +46,9 @@ public class Petugas {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public Petugas (int id, String namaPetugas) {
+        this.id = id;
+        this.namaPetugas = namaPetugas;
+    }
 }
