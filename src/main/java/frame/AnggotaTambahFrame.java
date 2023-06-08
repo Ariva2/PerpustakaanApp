@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,10 +49,10 @@ public final class AnggotaTambahFrame extends javax.swing.JFrame {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String qryPetugas = "SELECT * FROM petugas ORDER BY nama_petugas";
     
-    private final int SEDANG_TAMBAH= 101;
+    private final int SEDANG_TAMBAH = 101;
     private final int SEDANG_UBAH = 102;
     private final int IMG_WIDTH = 103;
-    private final int IMG_HEIGH = 224;
+    private final int IMG_HEIGHT = 224;
     
     public void rbJenisKelaminSetSelected(String jenisKelamin) {
         if(jenisKelamin.equals("Laki-laki"))
@@ -119,8 +119,8 @@ public final class AnggotaTambahFrame extends javax.swing.JFrame {
             Koneksi koneksi = new Koneksi ();
             Connection connection = koneksi.getConnection();
             
-            String query = "SELECT if FROM anggota where id LIKE ? "
-                         + " ORDER BY id_DESC";
+            String query = "SELECT id FROM anggota where id LIKE ? "
+                         + " ORDER BY id DESC";
             ps = connection.prepareStatement(query);
             ps.setString(1, idDate+"%");
             rs = ps.executeQuery();
@@ -206,6 +206,7 @@ public final class AnggotaTambahFrame extends javax.swing.JFrame {
         jXDatePicker1.setDate(getFormattedDate(anggota.getTanggalLahir()));
         cbAgama.setSelectedItem(anggota.getAgama());
         cbSetModel(qryPetugas, "id", "nama_petugas", cbPetugas);
+        bImage = getBufferedImage (anggota.getFotoAnggota());
         cbSetSelected(anggota.getPetugas().getNamaPetugas(),cbPetugas);
         lbGambar.setIcon(new ImageIcon(bImage));
         status = SEDANG_UBAH;
@@ -260,7 +261,11 @@ public final class AnggotaTambahFrame extends javax.swing.JFrame {
 
         jLabel7.setText("Foto Anggota");
 
-        eNamaAnggota.setText("jTextField2");
+        eNamaAnggota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eNamaAnggotaActionPerformed(evt);
+            }
+        });
 
         rbLaki.setBackground(new java.awt.Color(242, 240, 240));
         buttonGroup1.add(rbLaki);
@@ -489,6 +494,10 @@ public final class AnggotaTambahFrame extends javax.swing.JFrame {
             dispose();
         }
     }//GEN-LAST:event_bSimpanActionPerformed
+
+    private void eNamaAnggotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eNamaAnggotaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_eNamaAnggotaActionPerformed
 
     /**
      * @param args the command line arguments

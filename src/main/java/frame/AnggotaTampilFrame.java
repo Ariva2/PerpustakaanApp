@@ -55,7 +55,7 @@ public class AnggotaTampilFrame extends javax.swing.JFrame {
                         rs.getString("agama"),
                         rs.getInt("id_petugas"),
                         rs.getString("petugas.nama_petugas"),
-                        rs.getString("foto_anggota"));
+                        rs.getBlob("foto_anggota"));
                 anggotaList.add(anggota);
             }
         } catch (SQLException ex) {
